@@ -48,9 +48,9 @@ class Serial(base.BaseInterface):
     if not self._conn or not self._conn.isOpen():
       self.connect()
     if self.debug:
-      print "Writing packet: %s" % repr(packet)
+      print("Writing packet: %s" % repr(packet))
     try:
-      self._conn.write(str(packet))
+      self._conn.write(str(packet).encode())
     except OSError:
       return False
     else:
@@ -90,8 +90,8 @@ class USB(base.BaseInterface):
 
     device = self._get_device()
     if not device:
-      raise usb.USBError, ("failed to find USB device %04x:%04x" %
-                           (self.vendor_id, self.product_id))
+      raise usb.USBError("failed to find USB device %04x:%04x" %
+                         (self.vendor_id, self.product_id))
 
     interface = device.configurations[0].interfaces[0][0]
     self._read_endpoint, self._write_endpoint = interface.endpoints
@@ -110,10 +110,10 @@ class USB(base.BaseInterface):
     if not self._conn:
       self.connect()
     if self.debug:
-      print "Writing packet: %s" % repr(packet)
+      print( "Writing packet: %s" % repr(packet))
     written = self._conn.bulkWrite(self._write_endpoint.address, str(packet))
     if self.debug:
-      print "%d bytes written" % written
+      print( "%d bytes written" % written)
     self._conn.bulkWrite(self._write_endpoint.address, '')
 
 
@@ -136,5 +136,5 @@ class DebugInterface(base.BaseInterface):
   def write(self, packet):
     """ """
     if self.debug:
-      print "Writing packet: %s" % repr(packet)
+      print( "Writing packet: %s" % repr(packet))
     return True
